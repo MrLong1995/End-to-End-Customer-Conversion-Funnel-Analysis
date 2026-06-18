@@ -14,8 +14,8 @@ Hành trình chuyển đổi của khách hàng trải qua các mốc:
 Dữ liệu thô trong bảng `mkt.customers_progress` có tần suất lặp lại cao và đôi khi bị khuyết thiếu mốc thời gian do lỗi hệ thống. Đoạn script SQL trong repository này giải quyết 3 bài toán lõi:
 
 *   **Khử trùng lặp dữ liệu (Deduplication):** Sử dụng `ROW_NUMBER() OVER (PARTITION BY... ORDER BY created_at ASC)` để chỉ lọc ra mốc thời gian đầu tiên khách hàng đạt được ở từng cấp độ, loại bỏ hoàn toàn các bản ghi cập nhật trùng lặp phía sau.
-*   **Logic Bù trừ Dữ liệu (Fallback Mechanism):** Ứng dụng hàm `COALESCE` kết hợp với cấu trúc `LEFT JOIN` giữa các bảng tạm (`CTE`). Nếu hệ thống bị sót ngày kích hoạt ở bước trước (ví dụ `L3`), câu lệnh sẽ tự động tìm ngày ở các bước kế tiếp (`L4`, `L5`...) để đảm bảo không bỏ sót khách hàng trong báo cáo tháng.
-*   **Tối ưu cấu trúc cho Downstream (Power BI):** Chuyển đổi dữ liệu từ dạng dọc (Row-based) về dạng phẳng (Flattened Table). Việc này giúp giảm tải tính năng tính toán nặng cho Power BI, giữ cho Data Model nhẹ và tối ưu hóa hiệu suất của các câu lệnh DAX sau này.
+*   **Logic Bù trừ Dữ liệu :** Ứng dụng hàm `COALESCE` kết hợp với cấu trúc `LEFT JOIN` giữa các bảng tạm (`CTE`). Nếu hệ thống bị sót ngày kích hoạt ở bước trước (ví dụ `L3`), câu lệnh sẽ tự động tìm ngày ở các bước kế tiếp (`L4`, `L5`...) để đảm bảo không bỏ sót khách hàng trong báo cáo tháng.
+*   **Tối ưu cấu trúc (Power BI):** Chuyển đổi dữ liệu từ dạng dọc (Row-based) về dạng phẳng (Flattened Table). Việc này giúp giảm tải tính năng tính toán nặng cho Power BI, giữ cho Data Model nhẹ và tối ưu hóa hiệu suất của các câu lệnh DAX sau này.
 
 ---
 
