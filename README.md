@@ -11,7 +11,7 @@ Hành trình chuyển đổi của khách hàng trải qua các mốc:
 ---
 
 ##  Trọng tâm xử lý kỹ thuật (SQL Logic)
-Dữ liệu thô trong bảng `mkt.customers_progress` có tần suất lặp lại cao và đôi khi bị khuyết thiếu mốc thời gian do lỗi hệ thống. Đoạn script SQL trong repository này giải quyết 3 bài toán lõi:
+Dữ liệu thô trong 2 bảng MKT là customer và customer.progress có tần suất lặp lại cao và đôi khi bị khuyết thiếu mốc thời gian do lỗi hệ thống. Đoạn script SQL trong repository này giải quyết 3 bài toán lõi:
 
 *   **Khử trùng lặp dữ liệu (Deduplication):** Sử dụng `ROW_NUMBER() OVER (PARTITION BY... ORDER BY created_at ASC)` để chỉ lọc ra mốc thời gian đầu tiên khách hàng đạt được ở từng cấp độ, loại bỏ hoàn toàn các bản ghi cập nhật trùng lặp phía sau.
 *   **Logic Bù trừ Dữ liệu :** Ứng dụng hàm `COALESCE` kết hợp với cấu trúc `LEFT JOIN` giữa các bảng tạm (`CTE`). Nếu hệ thống bị sót ngày kích hoạt ở bước trước (ví dụ `L3`), câu lệnh sẽ tự động tìm ngày ở các bước kế tiếp (`L4`, `L5`...) để đảm bảo không bỏ sót khách hàng trong báo cáo tháng.
